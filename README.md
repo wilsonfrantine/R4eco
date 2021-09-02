@@ -65,7 +65,7 @@ trees <- upgma(S)
 tree_consensus <- tree_consensus(trees, type="mcc")
 ```
 
-##Contatct me
+## Contatct
 
 If you got any crash or need some help, please mail-me:
 Wilson Frantine-Silva
