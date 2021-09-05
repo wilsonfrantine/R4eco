@@ -47,7 +47,7 @@ S<-renkonen(df, boot=1000)
 head(S)
 ```
 
-To plot it as a drendrograma:
+To plot it as a dendrogram:
 
 ```{r}
 df<-simulate_data()
