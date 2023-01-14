@@ -7,18 +7,12 @@ In this documentation you'll find a very simple example of how to use it
 
 ## Installation
 
-to install this package you will must have the `devtools` package in your machine. To get that run the code bellow
+to install this package run the code bellow:
 
 
 ```{r
-#First install devtools
-install.packages("devtools")
-
-#then load it
-library(devtools)
-
 #to download R4eco
-install_github("wilsonfrantine/R4eco")
+remotes::install_github("wilsonfrantine/R4eco")
 
 #now you can load it
 library(R4bio)
