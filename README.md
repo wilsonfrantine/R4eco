@@ -24,6 +24,21 @@ library(R4eco)
 lmerPredictionPlot(model = modelX)
 ```
 `modelX` is a lme4 model object. If you have any, take a look a `?lmerPredictionPlot`
+
+### Example Data and Model
+
+```{r}
+d <- data.frame(
+  Type = rep(c("Forest", "Regeneration", "Restoration"), each = 12),
+  Landscape = rep(paste0("L", 1:12), times = 3),
+  Mean_NDVI_SD_500 = rnorm(36, mean = 0.2, sd = 0.02),
+  hill_q0 = sample(5:14, 36, replace = TRUE),
+  Abundance = sample(5:50, 36, replace = TRUE)
+)
+
+modelX <- lme4::lmer(formula = hill_q0 ~ Mean_NDVI_SD_500 * Type + (1|Landscape), data = d)
+```
+
 ### Some customization tips
 You can edit the output of the function as any ggplot2 graph. Find below some suggestions
 
@@ -38,22 +53,6 @@ lmerPredictionPlot(model = modelX) +
   scico::scale_color_scico_d(palette = "batlow", begin = 0.1, end = 0.7) +
   scico::scale_fill_scico_d(palette = "batlow", begin = 0.1, end = 0.7) +
   ggplot2::facet_wrap(~Type)
-```
-### Don't have a model? Try this!
-
-This is an example with simulated data to test the function
-### Example Data and Model
-
-```{r}
-d <- data.frame(
-  Type = rep(c("Forest", "Regeneration", "Restoration"), each = 12),
-  Landscape = rep(paste0("L", 1:12), times = 3),
-  Mean_NDVI_SD_500 = rnorm(36, mean = 0.2, sd = 0.02),
-  hill_q0 = sample(5:14, 36, replace = TRUE),
-  Abundance = sample(5:50, 36, replace = TRUE)
-)
-
-modelX <- lme4::lmer(formula = hill_q0 ~ Mean_NDVI_SD_500 * Type + (1|Landscape), data = d)
 ```
 
 ## 2. Renkonen Similarity Calculation
