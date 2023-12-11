@@ -1,4 +1,4 @@
-# Ecological Analysis Made Easy
+# R4eco - Eco-Analysis Made Easy in R
 
 R4eco is a small R package designed to simplify ecological analyses by providing a range of functions for diverse tasks. While the package is continuously expanding, it currently includes functions for Renkonen's similarity index (S) calculation, bootstrap implementation, and convenient plotting of UPGMA dendrograms.
 
@@ -15,26 +15,19 @@ library(R4eco)
 
 ```
 
-## # Example Data and Model
+## Some functionalities:
 
-```{r}
-d <- data.frame(
-  Type = rep(c("Forest", "Regeneration", "Restoration"), each = 12),
-  Landscape = rep(paste0("L", 1:12), times = 3),
-  Mean_NDVI_SD_500 = rnorm(36, mean = 0.2, sd = 0.02),
-  hill_q0 = sample(5:14, 36, replace = TRUE),
-  Abundance = sample(5:50, 36, replace = TRUE)
-)
-
-modelX <- lme4::lmer(formula = hill_q0 ~ Mean_NDVI_SD_500 * Type + (1|Landscape), data = d)
-
-```
-## lmerPredictionPlot Examples
+## 1. Plot Linear Mixed Models (lme4)
 
 ```{r}
 # Plot linear prediction
-lmerPredictionPlot(model = modelX, type = "linear.prediction")
+lmerPredictionPlot(model = modelX)
+```
+`modelX` is a lme4 model object. If you have any, take a look a `?lmerPredictionPlot`
+### Some customization tips
+You can edit the output of the function as any ggplot2 graph. Find below some suggestions
 
+```{r}
 # Customizing plot with color and fill scales
 lmerPredictionPlot(model = modelX) +
   scico::scale_color_scico_d(palette = "batlow", begin = 0.1, end = 0.7) +
@@ -46,8 +39,24 @@ lmerPredictionPlot(model = modelX) +
   scico::scale_fill_scico_d(palette = "batlow", begin = 0.1, end = 0.7) +
   ggplot2::facet_wrap(~Type)
 ```
+### Don't have a model? Try this!
 
-## Renkonen Similarity Calculation
+This is an example with simulated data to test the function
+### Example Data and Model
+
+```{r}
+d <- data.frame(
+  Type = rep(c("Forest", "Regeneration", "Restoration"), each = 12),
+  Landscape = rep(paste0("L", 1:12), times = 3),
+  Mean_NDVI_SD_500 = rnorm(36, mean = 0.2, sd = 0.02),
+  hill_q0 = sample(5:14, 36, replace = TRUE),
+  Abundance = sample(5:50, 36, replace = TRUE)
+)
+
+modelX <- lme4::lmer(formula = hill_q0 ~ Mean_NDVI_SD_500 * Type + (1|Landscape), data = d)
+```
+
+## 2. Renkonen Similarity Calculation
 
 To begin, you can generate sample data using the simulate_data() function: `simulate_data()`.
 
@@ -71,7 +80,7 @@ S <- renkonen(df, boot = 1000)
 head(S)
 ```
 
-## UPGMA Dendrogram Plotting
+## 3. UPGMA Dendrogram Plotting
 
 Visualize Renkonen similarity as a UPGMA dendrogram:
 
@@ -83,7 +92,7 @@ trees <- upgma(S)
 plot_upgma(trees)
 ```
 
-## Consensus Dendrogram
+### Consensus Dendrogram
 Compute a consensus dendrogram for saving as Newick format or using in other software:
 
 ```{r}
@@ -92,6 +101,17 @@ df <- simulate_data()
 S <- renkonen(df, boot = 1000)
 trees <- upgma(S)
 tree_consensus <- tree_consensus(trees, type = "mcc")
+```
+## 4. GLM and LM surface plots
+
+`ggsurface` can handle some glm and lm models to generate 2D surface plots:
+
+```{r}
+data(mtcars)
+m <- glm(mpg ~ wt + hp, data=mtcars, family = "gaussian")
+ggsurface(m, x.var = "wt", y.var = "hp",
+   legend.title = "milles per galon", high.col = "darkred",
+   round.legend = 0)
 ```
 
 ## Contact
